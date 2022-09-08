@@ -21,7 +21,7 @@ pipeline{
     stages{
         stage('BUILD'){
             steps{
-                sh 'maven -s clean install -DskipTests'
+                sh 'mvn -s clean install -DskipTests'
             }
             post{
                 success {
