@@ -1,9 +1,9 @@
 pipeline{
     agent any
 
-    tools(
-        maven "MAVEN3"
-    )
+    tools{
+         maven "MAVEN3"
+    }  
 
     environment{
         SNAP_REPO= 'vprofile-snapshot'
