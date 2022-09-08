@@ -76,39 +76,23 @@ pipeline{
 
         stage('upload artifacts to nexus'){
             steps{
-                script{
-                    pom = readMavenPom file: "pom.xml";
-                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-                    artifactPath = filesByGlob[0].path;
-                    artifactExists = fileExists artifactPath;
-                    if(artifactExists) {
-                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
-                        nexusArtifactUploader(
-                            nexusVersion: 'nexus3',
-                            protocol: 'http',
-                            nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
-                            groupId: 'QA',
-                            version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
-                            repository: "${RELEASE_REPO}",
-                            credentialsId: "${NEXUS_LOGIN}",
-                            artifacts: [
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: artifactPath,
-                                type: pom.packaging],
-                                [artifactId: pom.artifactId,
-                                classifier: '',
-                                file: "pom.xml",
-                                type: "pom"]
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
+                    groupId: 'QA',
+                    version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                    repository: "${RELEASE_REPO}",
+                    credentialsId: "${NEXUS_LOGIN}",
+                    artifacts: [
 
-                            ]
-                        );
-                }
-                else{
-                    error "*** File: ${artifactPath}, could not be found";
-                }
-            }
+                        [artifactId: 'vprofileapp',
+                        classifier: '',
+                        file: 'target/vprofile-v2.war',
+                        type: "war"]
+
+                    ]
+                )
         }
         
     }
