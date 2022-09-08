@@ -93,11 +93,15 @@ pipeline{
                             repository: "${RELEASE_REPO}",
                             credentialsId: "${NEXUS_LOGIN}",
                             artifacts: [
-                                [artifactId: 'vprofileapp',
+                                [artifactId: pom.artifactId,
                                 classifier: '',
-                                file: 'target/vprofile-v2.war',
-                                type: 'war']
-                                
+                                file: artifactPath,
+                                type: pom.packaging],
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+
                             ]
                         );
                 }
